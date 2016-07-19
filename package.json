@@ -1,0 +1,23 @@
+{
+  "name": "node-cloud",
+  "version": "1.0.0",
+  "description": "A node module for interacting with different services provided by different cloud providers",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unbarrier/filecloud.git"
+  },
+  "author": "Lalit Khattar",
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "mocha": "^2.2.45"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1.4",
+    "bluebird": "^2.5.3",
+    "lodash": "^3.9.3"
+  }
+}
