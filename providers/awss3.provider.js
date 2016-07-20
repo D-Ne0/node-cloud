@@ -16,7 +16,7 @@ const awsS3 = function (config) {
     downloadFile: downloadFile,
     getFileUrl: getFileUrl,
     uploadContent: uploadContent,
-    uploadFile: uploadFile,
+    deleteFile: deleteFile
   };
 };
 
@@ -74,11 +74,12 @@ const uploadContent = function (bucket, key, body) {
  * Return:
  *    bluebird promise
  */
+/*
 const uploadFile = function (bucket, key, path) {
   const bodyStream = fs.createReadStream(path);
 
-  return this.putObject(bucket, key, bodyStream);
-};
+  return this.uploadContent(bucket, key, bodyStream);
+};*/
 
 
 /**
@@ -156,6 +157,37 @@ const getFileUrl = function (bucket, key, opts) {
     }
     else {
       deferred.resolve(url);
+    }
+  });
+
+  return deferred.promise;
+};
+
+
+/**
+ * Delete a file from S3
+ *
+ * Parameters:
+ *    bucket: String
+ *        Bucket from which the file will be deleted
+ *    key: String
+ *        File to be deleted
+ *
+ * Return:
+ *    bluebird promise
+ */
+const deleteFile = function (bucket, key) {
+  const deferred = BPromise.defer();
+
+  var s3 = new AWS.S3();
+  var params = {Bucket: bucket, Key: key};
+
+  s3.deleteObject(params, function (error, data) {
+    if (error) {
+      deferred.reject(error);
+    }
+    else {
+      deferred.resolve(data);
     }
   });
 
