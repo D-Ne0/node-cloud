@@ -37,7 +37,7 @@ const FileStorageFactory = provider => {
    * Return:
    *    bluebird promise
    */
-  service.uploadFile = (folder, file, path, opts) => provider.uploadFile(folder, file, path, opts);
+  //service.uploadFile = (folder, file, path, opts) => provider.uploadFile(folder, file, path, opts);
 
 
   /**

@@ -13,7 +13,9 @@
   "author": "Lalit Khattar",
   "devDependencies": {
     "expect.js": "^0.3.1",
-    "mocha": "^2.2.45"
+    "mocha": "^2.2.45",
+    "sinon": "^1.12.2",
+    "restler": "^3.2.2"
   },
   "dependencies": {
     "aws-sdk": "^2.1.4",
