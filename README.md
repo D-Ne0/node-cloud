@@ -4,8 +4,14 @@ node-cloud
 A node module for interacting with different services of multiple clouds(AWS, Azure etc.)
 
 ###Installation:
-```
-npm install node-cloud
+```js
+{
+  "dependencies": {
+    "node-cloud": "https://github.com/D-Ne0/node-cloud"
+  }
+}
+
+npm i node-cloud
 ```
 
 ###Usage:
