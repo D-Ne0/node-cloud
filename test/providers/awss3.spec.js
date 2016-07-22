@@ -3,8 +3,8 @@
 const expect = require('expect.js');
 const sinon = require('sinon');
 const restler = require('restler');
-const BluebirdPromise = require('bluebird');
-const fs = BluebirdPromise.promisifyAll(require('fs'));
+const BPromise = require('bluebird');
+const fs = BPromise.promisifyAll(require('fs'));
 const path = require('path');
 const AWS = require('../../providers/awss3.provider')({
               accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -16,9 +16,9 @@ const AWS = require('../../providers/awss3.provider')({
 // retrieve them.
 
 describe('AWSS3', function() {
-  this.timeout(15000);
+  this.timeout(20000);
   let sandbox, bucket = process.env.S3_BUCKET;
-  let saveFilepath;
+  let filepath, saveFilepath;
   let downloadReadStream;
   let key, copyKey, content;
   let signedURL, signedURLResp;
@@ -37,11 +37,16 @@ describe('AWSS3', function() {
     // Create the key with a random number so that tests being run at the same
     // time won't cause problems.
     key = 'demo' + Math.floor(Math.random() * 10000) + '.txt';
+    filepath = path.resolve(__dirname, '../assets/demo.txt');
     saveFilepath = path.resolve(__dirname, '../assets/download.txt');
-    content = 'Hello World!';
 
-    return AWS.uploadContent(bucket, key, content)
+    const readFile = BPromise.promisify(fs.readFile, {multiArgs: true});
+
+    return readFile(filepath, 'utf8')
       .then(function(data) {
+        content = data;
+        return AWS.uploadFile(bucket, key, filepath)
+      }).then(function(data) {
         return AWS.downloadFile(bucket, key, saveFilepath);
       }).then(function() {
         downloadReadStream = fs.createReadStream(saveFilepath);
@@ -67,11 +72,11 @@ describe('AWSS3', function() {
   });
 
   it('original file matches file downloaded from s3', function(done) {
-    fs.readFile(saveFilepath, 'utf8', function(err, data) {
+    fs.readFile(saveFilepath, 'utf8', function(err, downloadedContent) {
       if(err) {
         console.log(err);
       } else {
-        expect(data).to.be.eql(content);
+        expect(downloadedContent).to.be.eql(content);
         done();
       }
     });

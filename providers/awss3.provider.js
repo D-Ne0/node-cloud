@@ -16,6 +16,7 @@ const awsS3 = function (config) {
     downloadFile: downloadFile,
     getFileUrl: getFileUrl,
     uploadContent: uploadContent,
+    uploadFile: uploadFile,
     deleteFile: deleteFile
   };
 };
@@ -74,12 +75,21 @@ const uploadContent = function (bucket, key, body) {
  * Return:
  *    bluebird promise
  */
-/*
 const uploadFile = function (bucket, key, path) {
-  const bodyStream = fs.createReadStream(path);
+  const deferred = BPromise.defer();
 
-  return this.uploadContent(bucket, key, bodyStream);
-};*/
+  const readFile = BPromise.promisify(fs.readFile);
+
+  readFile(path)
+    .then(content => this.uploadContent(bucket, key, content))
+    .then(function(data) {
+      deferred.resolve(data);
+    }).catch(function(err) {
+      deferred.reject(err);
+    });
+
+  return deferred.promise;
+};
 
 
 /**
