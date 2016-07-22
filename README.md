@@ -39,9 +39,13 @@ All these functions return a Bluebird promise.
 var content = 'Hello World'; // It can be a buffer or a stream or a simple string
 aws.uploadContent(bucket, key, content);
 
+// Upload file to S3
+var filepath = '/tmp/kdjsd83839' // filepath on local server
+aws.uploadFile(bucket, key, filepath);
+
 // Download a file from S3 and save it locally
-var filepath = '/home/myuser/download.txt'; // path where file will be downloaded
-aws.downloadFile(bucket, key, filepath);
+var saveFilepath = '/home/myuser/download.txt'; // path where file will be downloaded
+aws.downloadFile(bucket, key, saveFilepath);
 
 // Get a URL for a file on S3 that will expire in 1 hour by default
 var opts = {expires: 7200}; // expires in seconds
