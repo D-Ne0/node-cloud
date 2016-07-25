@@ -93,6 +93,51 @@ const uploadFile = function (bucket, key, path) {
 
 
 /**
+ * Upload a file in S3 (returns the file location on S3)
+ *
+ * Parameters:
+ *    bucket: String
+ *        Put the file in this bucket
+ *    key: String
+ *        Save the file under this key
+ *    path: String
+ *        Path from where file content will be read
+ *
+ * Return:
+ *    bluebird promise
+ */
+ const uploadFile2 = function (bucket, key, path) {
+  const deferred = BPromise.defer();
+
+  const s3 = new AWS.S3();
+  const params = {
+    Bucket: bucket,
+    Key: key,
+    Body: path,
+  };
+
+  const readFile = BPromise.promisify(fs.readFile);
+
+  readFile(path)
+    .then(content => {
+      s3.upload(params, function (error, data) {
+        if (error) {
+          deferred.reject(error);
+        }
+        else {
+          deferred.resolve(data);
+        }
+      });
+    })
+    .catch(function(err) {
+      deferred.reject(err);
+    });
+
+  return deferred.promise;
+};
+
+
+/**
  * Download file from S3
  *
  * Parameters:
