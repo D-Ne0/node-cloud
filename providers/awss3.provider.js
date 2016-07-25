@@ -17,6 +17,7 @@ const awsS3 = function (config) {
     getFileUrl: getFileUrl,
     uploadContent: uploadContent,
     uploadFile: uploadFile,
+    uploadFile2: uploadFile2,
     deleteFile: deleteFile
   };
 };
@@ -110,16 +111,15 @@ const uploadFile = function (bucket, key, path) {
   const deferred = BPromise.defer();
 
   const s3 = new AWS.S3();
-  const params = {
-    Bucket: bucket,
-    Key: key,
-    Body: path,
-  };
-
   const readFile = BPromise.promisify(fs.readFile);
 
   readFile(path)
     .then(content => {
+      const params = {
+        Bucket: bucket,
+        Key: key,
+        Body: content,
+      };
       s3.upload(params, function (error, data) {
         if (error) {
           deferred.reject(error);
