@@ -16,8 +16,8 @@ const awsS3 = function (config) {
     downloadFile: downloadFile,
     getFileUrl: getFileUrl,
     uploadContent: uploadContent,
+    // uploadFile: uploadFile,
     uploadFile: uploadFile,
-    uploadFile2: uploadFile2,
     deleteFile: deleteFile
   };
 };
@@ -76,21 +76,21 @@ const uploadContent = function (bucket, key, body) {
  * Return:
  *    bluebird promise
  */
-const uploadFile = function (bucket, key, path) {
-  const deferred = BPromise.defer();
-
-  const readFile = BPromise.promisify(fs.readFile);
-
-  readFile(path)
-    .then(content => this.uploadContent(bucket, key, content))
-    .then(function(data) {
-      deferred.resolve(data);
-    }).catch(function(err) {
-      deferred.reject(err);
-    });
-
-  return deferred.promise;
-};
+// const uploadFile = function (bucket, key, path) {
+//   const deferred = BPromise.defer();
+//
+//   const readFile = BPromise.promisify(fs.readFile);
+//
+//   readFile(path)
+//     .then(content => this.uploadContent(bucket, key, content))
+//     .then(function(data) {
+//       deferred.resolve(data);
+//     }).catch(function(err) {
+//       deferred.reject(err);
+//     });
+//
+//   return deferred.promise;
+// };
 
 
 /**
@@ -107,7 +107,7 @@ const uploadFile = function (bucket, key, path) {
  * Return:
  *    bluebird promise
  */
- const uploadFile2 = function (bucket, key, path) {
+ const uploadFile = function (bucket, key, path) {
   const deferred = BPromise.defer();
 
   const s3 = new AWS.S3();
