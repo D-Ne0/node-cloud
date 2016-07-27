@@ -1,7 +1,7 @@
 'use strict';
 
 const FileStorageFactory = provider => {
-  
+
   const service = {};
 
   /**
@@ -37,17 +37,35 @@ const FileStorageFactory = provider => {
    * Return:
    *    bluebird promise
    */
+  // service.uploadFile = (folder, file, path, opts) => provider.uploadFile(folder, file, path, opts);
+
+
+  /**
+   * Upload a file in S3 (returns the file details on S3)
+   *
+   * Parameters:
+   *    folder: String
+   *        Upload the file in this bucket
+   *    file: String
+   *        Save the file under this name
+   *    path: String
+   *        Path from where file content will be read
+   *    opts: Object, Optional
+   *
+   * Return:
+   *    bluebird promise
+   */
   service.uploadFile = (folder, file, path, opts) => provider.uploadFile(folder, file, path, opts);
 
 
   /**
-   * Get cloud file url 
+   * Get cloud file url
    *
    * Parameters:
    *    folder: String
    *        Folder where file is located
    *    file: String
-   *       File whose URL is to be created 
+   *       File whose URL is to be created
    *    opts: Object, Optional
    *
    * Return:
