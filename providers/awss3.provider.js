@@ -18,7 +18,8 @@ const awsS3 = function (config) {
     uploadContent: uploadContent,
     // uploadFile: uploadFile,
     uploadFile: uploadFile,
-    deleteFile: deleteFile
+    deleteFile: deleteFile,
+    copyFile: copyFile
   };
 };
 
@@ -170,7 +171,19 @@ const downloadFile = function (bucket, key, path) {
   return deferred.promise;
 };
 
-
+const copyFile = function (bucket, key, copySource) {
+  const deferred = BPromise.defer();
+  const s3 = new AWS.S3();
+  const params = {Bucket: bucket, Key: key, CopySource: copySource};
+  s3.copyObject(params, function(error, data) {
+    if (error) {
+      deferred.reject(error);
+    } else {
+      deferred.resolve(data);           // successful response
+    }
+  });
+  return deferred.promise;
+};
 /**
  * Get S3 file url
  *
