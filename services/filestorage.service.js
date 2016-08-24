@@ -91,6 +91,8 @@ const FileStorageFactory = provider => {
    */
   service.downloadFile = (folder, file, path, opts) => provider.downloadFile(folder, file, path, opts);
 
+  service.copyFile = (folder, file, copySource, opts) => provider.copyFile(folder, file, copySource, opts);
+
   return service;
 };
 
