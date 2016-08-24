@@ -179,7 +179,29 @@ const copyFile = function (bucket, key, copySource) {
     if (error) {
       deferred.reject(error);
     } else {
-      deferred.resolve(data);           // successful response
+      getRegion(bucket)
+        .then((region) => {
+          const url = `https://${bucket}.s3-${region.LocationConstraint}.amazonaws.com/${key}`;
+          data.Location = url;    // adding Location
+          deferred.resolve(data); // successful response
+        })
+        .catch(function (err) {
+          deferred.reject(err);
+        });
+    }
+  });
+  return deferred.promise;
+};
+const getRegion = function (bucket) {
+  const deferred = BPromise.defer();
+  const s3 = new AWS.S3();
+  const params = {Bucket: bucket};
+  s3.getBucketLocation(params, function (err, data) {
+    if (err) {
+      deferred.reject(err);
+    }
+    else {
+      deferred.resolve(data);
     }
   });
   return deferred.promise;
